@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>負担軽減確認アンケート｜KINOWA Holdings</title>
+<title>内部委託 負担軽減確認アンケート｜KINOWA Holdings</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,18 +15,20 @@
   select:focus, button:focus-visible { outline:2px solid #00B388; outline-offset:1px; }
   input[type=password] { font-family:inherit; font-size:15px; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; width:100%; }
 
-  header { display:flex; align-items:center; gap:24px; padding:16px 28px; background:#fff; border-bottom:1px solid #e2e8f0; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
-  .brand { display:flex; align-items:center; gap:12px; }
-  .brandMark { font-size:30px; color:#00B388; }
-  .brandName { font-weight:700; font-size:16px; color:#0f2e22; }
-  .brandSub { font-size:12px; color:#64748b; }
+  header { display:flex; align-items:center; gap:20px; padding:14px 28px; background:#fff; border-bottom:1px solid #e2e8f0; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .brand { display:flex; align-items:center; gap:14px; }
+  .brandLogo { height:40px; width:auto; display:block; }
+  .brandFallback { font-weight:700; font-size:17px; color:#0f2e22; letter-spacing:.02em; }
+  .brandDiv { width:1px; height:30px; background:#e2e8f0; }
+  .brandName { font-weight:700; font-size:14.5px; color:#0f2e22; }
+  .brandSub { font-size:11.5px; color:#64748b; }
   nav { display:flex; gap:4px; margin-left:auto; }
   .tab { background:transparent; color:#64748b; border:none; padding:8px 16px; border-radius:8px; font-size:14px; font-weight:600; }
   .tab.active { background:#e8f5ef; color:#00B388; }
   main { max-width:960px; margin:0 auto; padding:32px 24px 80px; }
   footer { text-align:center; padding:16px; font-size:12px; color:#94a3b8; border-top:1px solid #e2e8f0; background:#fff; }
 
-  h1 { font-size:30px; line-height:1.35; margin-bottom:16px; font-weight:700; color:#0f2e22; }
+  h1 { font-size:29px; line-height:1.35; margin-bottom:16px; font-weight:700; color:#0f2e22; }
   h2 { font-size:22px; font-weight:700; color:#0f2e22; }
   h3 { font-size:16px; margin-bottom:14px; font-weight:700; color:#334155; }
   .lead { color:#52677d; line-height:1.9; font-size:15px; }
@@ -39,6 +41,7 @@
   .qNum { font-size:12px; color:#00B388; font-weight:700; margin-bottom:6px; }
   .qText { font-size:15px; margin-bottom:16px; line-height:1.6; color:#1f2d3d; }
   .optTag { font-size:10px; color:#64748b; background:#f1f5f9; padding:2px 7px; border-radius:4px; margin-left:8px; }
+  .reqTag { font-size:10px; color:#dc2626; background:#fef2f2; padding:2px 7px; border-radius:4px; margin-left:8px; }
   .scaleRow { display:flex; gap:6px; }
   .scaleBtn { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 2px; border-radius:10px; border:1.5px solid #e2e8f0; background:#f8fafc; color:#64748b; transition:all .15s; }
   .scaleBtn.active { border-color:#00B388; background:#e8f5ef; color:#00B388; }
@@ -89,17 +92,19 @@
   .tableWrap { overflow-x:auto; }
   .voice { border-left:3px solid #00B388; background:#f8fafc; border-radius:0 10px 10px 0; padding:12px 14px; margin-bottom:10px; font-size:14px; line-height:1.75; color:#334155; }
   .voiceMeta { font-size:11px; color:#94a3b8; margin-bottom:4px; }
-  .protected { padding:24px; text-align:center; color:#94a3b8; font-size:13.5px; }
+  .protected { padding:24px; text-align:center; color:#94a3b8; font-size:13.5px; line-height:1.8; }
   .loginBox { max-width:380px; margin:60px auto; }
 </style>
 </head>
 <body>
 <header>
   <div class="brand">
-    <span class="brandMark">🌿</span>
+    <img class="brandLogo" id="brandLogo" alt="木の和ホールディングス"
+         onerror="this.outerHTML='<span class=\'brandFallback\'>KINOWA Holdings</span>'">
+    <span class="brandDiv"></span>
     <div>
-      <div class="brandName" id="brandName">負担軽減確認アンケート</div>
-      <div class="brandSub">KINOWA Holdings｜医療連携チーム</div>
+      <div class="brandName" id="brandName">内部委託 負担軽減確認アンケート</div>
+      <div class="brandSub">医療連携チーム</div>
     </div>
   </div>
   <nav>
@@ -112,22 +117,30 @@
 
 <script>
 /* ============================================================
-   設定
+   設定（ここだけ書き替えれば他の店舗・他のテーマでも使えます）
    ============================================================ */
 
 // ▼ Apps Script のデプロイURL(...exec)をここに貼ってください
-const API_URL = "https://script.google.com/macros/s/AKfycbyIl10ZACuZP1W_WxOTR2iDCmlWGczc9TTddJGppY78Q-XDqvB_VduBOX5olQtzIDC-/execE";
+const API_URL = "https://script.google.com/macros/s/AKfycbyIl10ZACuZP1W_WxOTR2iDCmlWGczc9TTddJGppY78Q-XDqvB_VduBOX5olQtzIDC-/exec";
 const USE_REMOTE = API_URL && !API_URL.startsWith("PASTE_");
 
-const ADMIN_PASSWORD = "kinowa1001"; // ★本番前に変更
+const ADMIN_PASSWORD = "kinowa1001";
+
+// ロゴ。自前のリポジトリに置く場合は "logo.png" のような相対パスに変更してください
+const LOGO_URL = "https://kinowahd.jp/wp/wp-content/uploads/2026/02/logo_yoko-1.png";
 
 const CONFIG = {
-  title: "くりの木薬局 負担軽減確認アンケート",
-  target: 7, // 対象人数(回答率の分母)
+  title: "内部委託 負担軽減確認アンケート",
   intro: "内部委託業務が現場の負担軽減につながっているかを確認するための調査です。回答は匿名で、氏名やメールアドレスは取得しません。所要時間は3分程度です。"
 };
 
-const MIN_N = 3; // この人数未満の実施回は集計を表示しない(個人特定の防止)
+// 対象店舗。1つだけにすると店舗選択欄は表示されず、その店舗に固定されます
+const STORES = ["ケアの木", "くりの木", "ゆずの木", "ほしの木", "そらの木", "さくらの木", "お茶の木", "はれの木", "にじの木", "サン薬局", "つばくろ"];
+
+// 店舗ごとの対象人数（回答率の分母）。不明な店舗は空欄のままで構いません
+const TARGETS = { "くりの木": 7 };
+
+const MIN_N = 3; // この人数未満は集計を表示しない(個人特定の防止)
 let minN = MIN_N;
 
 // ブロック(表示順=この配列の順)
@@ -157,7 +170,7 @@ const QUESTIONS = [
   { id:"C3", block:"C", type:"scale", text:"新しい業務や、これまで手が回らなかった業務に取り組めるようになった", required:true },
   { id:"C3T", block:"C", type:"text", text:"具体的にどのような業務に取り組めるようになりましたか", required:false, cond:{ id:"C3", op:">=", v:4 } },
 
-  { id:"D1", block:"D", type:"scale", text:"日昇ガーデン以外の施設の予製も内部委託したい", required:true },
+  { id:"D1", block:"D", type:"scale", text:"現在委託している施設以外の予製も、内部委託したい", required:true },
   { id:"D1T", block:"D", type:"text", text:"そう思わない理由を教えてください", required:false, cond:{ id:"D1", op:"<=", v:2 } },
 
   { id:"E1", block:"E", type:"text", text:"内部委託について、改善してほしい点があれば教えてください", required:false }
@@ -172,6 +185,7 @@ const SCALE = [
 ];
 const SMAX = 5;
 const UNKNOWN = "わからない";
+const ALL = "__all__";
 
 /* ============================================================
    実施回(自動判定)
@@ -197,7 +211,7 @@ let dataLoadError = null;
 
 async function loadResponses(){
   if(!USE_REMOTE){
-    try { responses = JSON.parse(localStorage.getItem("kurinoki_responses_v1") || "[]"); }
+    try { responses = JSON.parse(localStorage.getItem("naibu_itaku_survey_v1") || "[]"); }
     catch(e){ responses = []; }
     return;
   }
@@ -219,7 +233,7 @@ async function loadResponses(){
 async function submitResponse(rec){
   if(!USE_REMOTE){
     responses.push(rec);
-    localStorage.setItem("kurinoki_responses_v1", JSON.stringify(responses));
+    localStorage.setItem("naibu_itaku_survey_v1", JSON.stringify(responses));
     return true;
   }
   try {
@@ -242,13 +256,10 @@ async function submitResponse(rec){
 let view = "survey";
 let isAdminMode = false;
 let dashPeriod = null;
-let surveyState = { answers:{}, done:false, sending:false, showErrors:false };
+let dashStore = ALL;
+let surveyState = { store: STORES.length === 1 ? STORES[0] : "", answers:{}, done:false, sending:false, showErrors:false };
 
-function setView(v){
-  view = v;
-  render();
-  window.scrollTo(0,0);
-}
+function setView(v){ view = v; render(); window.scrollTo(0,0); }
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
@@ -315,6 +326,15 @@ function questionStats(recs, q){
   };
 }
 
+function targetOf(store){
+  if(store === ALL){
+    const stores = [...new Set(responses.map(r => r.store).filter(Boolean))];
+    const vals = stores.map(s => TARGETS[s]).filter(v => v);
+    return vals.length === stores.length && vals.length ? vals.reduce((a,b)=>a+b,0) : null;
+  }
+  return TARGETS[store] || null;
+}
+
 /* ============================================================
    回答画面
    ============================================================ */
@@ -334,7 +354,21 @@ function surveyHtml(){
     const v = surveyState.answers[q.id];
     return v !== undefined && v !== null && String(v) !== "";
   }).length;
-  const missing = requiredVisible.length - answeredCount;
+  let missing = requiredVisible.length - answeredCount;
+  if(!surveyState.store) missing += 1;
+
+  let storeCard = "";
+  if(STORES.length > 1){
+    const invalid = surveyState.showErrors && !surveyState.store;
+    storeCard = `<div class="qCard ${invalid ? "invalid" : ""}" id="card-store">
+      <div class="qNum">所属<span class="reqTag">必須</span></div>
+      <div class="qText">お勤めの店舗を選んでください</div>
+      <select onchange="pickStore(this.value)">
+        <option value="">選択してください</option>
+        ${STORES.map(s => `<option value="${escapeHtml(s)}" ${surveyState.store===s?"selected":""}>${escapeHtml(s)}</option>`).join("")}
+      </select>
+    </div>`;
+  }
 
   let body = "";
   BLOCKS.forEach(b => {
@@ -356,6 +390,7 @@ function surveyHtml(){
       <span class="chip">所要時間 約3分</span>
       <span class="chip">対象月 ${formatPeriod(currentPeriod())}</span>
     </div>
+    ${storeCard ? `<div class="secLabel">はじめに</div>` + storeCard : ""}
     ${body}
     <div class="submitRow">
       ${btn}
@@ -369,7 +404,7 @@ function questionCardHtml(q){
   const val = surveyState.answers[q.id];
   const invalid = surveyState.showErrors && q.required && (val === undefined || val === null || String(val) === "");
   const num = q.id.replace(/T$/, "");
-  const optTag = q.required ? "" : `<span class="optTag">任意</span>`;
+  const tag = q.required ? "" : `<span class="optTag">任意</span>`;
 
   let control = "";
   if(q.type === "scale"){
@@ -389,11 +424,13 @@ function questionCardHtml(q){
   }
 
   return `<div class="qCard ${invalid ? "invalid" : ""}" id="card-${q.id}">
-    <div class="qNum">${num}${optTag}</div>
+    <div class="qNum">${num}${tag}</div>
     <div class="qText">${escapeHtml(q.text)}</div>
     ${control}
   </div>`;
 }
+
+function pickStore(v){ surveyState.store = v; render(); }
 
 function pick(id, v){
   surveyState.answers[id] = v;
@@ -404,11 +441,15 @@ function pick(id, v){
   render();
 }
 
-function typeText(id, v){
-  surveyState.answers[id] = v;
-}
+function typeText(id, v){ surveyState.answers[id] = v; }
 
 async function handleSubmit(){
+  if(!surveyState.store){
+    surveyState.showErrors = true; render();
+    const el = document.getElementById("card-store");
+    if(el) el.scrollIntoView({ block:"center" });
+    return;
+  }
   const visible = QUESTIONS.filter(q => condMet(q.cond, surveyState.answers));
   const missing = visible.filter(q => {
     if(!q.required) return false;
@@ -416,18 +457,17 @@ async function handleSubmit(){
     return v === undefined || v === null || String(v) === "";
   });
   if(missing.length){
-    surveyState.showErrors = true;
-    render();
+    surveyState.showErrors = true; render();
     const el = document.getElementById("card-" + missing[0].id);
     if(el) el.scrollIntoView({ block:"center" });
     return;
   }
 
   surveyState.sending = true; render();
-  const rec = { period: currentPeriod(), ts: Date.now(), answers: surveyState.answers };
+  const rec = { store: surveyState.store, period: currentPeriod(), ts: Date.now(), answers: surveyState.answers };
   const ok = await submitResponse(rec);
   surveyState.sending = false;
-  if(ok){ surveyState.done = true; }
+  if(ok) surveyState.done = true;
   render();
   window.scrollTo(0,0);
 }
@@ -448,7 +488,7 @@ function loginHtml(){
 function tryLogin(){
   const v = document.getElementById("pw").value;
   if(v === ADMIN_PASSWORD){ isAdminMode = true; render(); }
-  else { alert("パスワードが違います。"); }
+  else alert("パスワードが違います。");
 }
 
 function dashboardHtml(){
@@ -458,14 +498,23 @@ function dashboardHtml(){
 
   const periods = [...new Set(responses.map(r => r.period))].sort().reverse();
   if(!dashPeriod || periods.indexOf(dashPeriod) === -1) dashPeriod = periods[0];
-  const recs = responses.filter(r => r.period === dashPeriod);
+  const periodRecs = responses.filter(r => r.period === dashPeriod);
+  const storesInData = [...new Set(periodRecs.map(r => r.store).filter(Boolean))]
+    .sort((a,b) => STORES.indexOf(a) - STORES.indexOf(b));
+  if(dashStore !== ALL && storesInData.indexOf(dashStore) === -1) dashStore = ALL;
+  const recs = dashStore === ALL ? periodRecs : periodRecs.filter(r => r.store === dashStore);
   const n = recs.length;
+  const scopeName = dashStore === ALL ? "全店舗" : dashStore;
 
   const head = `<div class="dashHead">
-    <h2>集計｜${formatPeriod(dashPeriod)}</h2>
+    <h2>集計｜${formatPeriod(dashPeriod)}・${escapeHtml(scopeName)}</h2>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <select onchange="dashPeriod=this.value;render()">
         ${periods.map(p => `<option value="${p}" ${p===dashPeriod?"selected":""}>${formatPeriod(p)}</option>`).join("")}
+      </select>
+      <select onchange="dashStore=this.value;render()">
+        <option value="${ALL}" ${dashStore===ALL?"selected":""}>全店舗</option>
+        ${storesInData.map(s => `<option value="${escapeHtml(s)}" ${dashStore===s?"selected":""}>${escapeHtml(s)}</option>`).join("")}
       </select>
       <select onchange="minN=Number(this.value);render()">
         ${[1,3,4].map(v => `<option value="${v}" ${v===minN?"selected":""}>表示下限 ${v}人</option>`).join("")}
@@ -477,14 +526,16 @@ function dashboardHtml(){
 
   if(n < minN){
     return head + `<div class="panel"><div class="protected">
-      この実施回の回答は ${n}件です。表示下限（${minN}人）に達していないため、個人が特定されないよう集計を非表示にしています。
-    </div></div>` + trendHtml(periods);
+      この範囲の回答は ${n}件です。表示下限（${minN}人）に達していないため、個人が特定されないよう集計を非表示にしています。<br>
+      店舗を「全店舗」に切り替えるか、表示下限を変更してください。
+    </div></div>` + storeTableHtml(periodRecs, storesInData) + trendHtml(periods);
   }
 
-  const rate = CONFIG.target ? Math.round(n / CONFIG.target * 1000)/10 : null;
+  const target = targetOf(dashStore);
+  const rate = target ? Math.round(n / target * 1000)/10 : null;
   const stats = `<div class="statRow">
     <div class="stat"><div class="statValue">${n}</div><div class="statLabel">回答数</div></div>
-    <div class="stat"><div class="statValue">${CONFIG.target || "—"}</div><div class="statLabel">対象人数</div></div>
+    <div class="stat"><div class="statValue">${target || "—"}</div><div class="statLabel">対象人数</div></div>
     <div class="stat"><div class="statValue">${rate !== null ? rate + "%" : "—"}</div><div class="statLabel">回答率</div></div>
   </div>`;
 
@@ -545,7 +596,10 @@ function dashboardHtml(){
   textQs.forEach(q => {
     recs.forEach(r => {
       const v = String((r.answers||{})[q.id] || "").trim();
-      if(v) voices += `<div class="voice"><div class="voiceMeta">${q.id}｜${escapeHtml(q.text)}</div>${escapeHtml(v)}</div>`;
+      if(v){
+        const label = dashStore === ALL ? `${escapeHtml(r.store || "")}｜${q.id}` : q.id;
+        voices += `<div class="voice"><div class="voiceMeta">${label}｜${escapeHtml(q.text)}</div>${escapeHtml(v)}</div>`;
+      }
     });
   });
   const voicePanel = `<div class="panel">
@@ -555,18 +609,45 @@ function dashboardHtml(){
 
   const reading = `<div class="note">
     <strong>読み方</strong>
-    <p>対象が${CONFIG.target}名前後のため、1人の回答で平均が0.2前後動きます。平均値の小さな差ではなく、回答の分布（1〜2を選んだ人が何人いるか）と自由記述を根拠に判断してください。</p>
+    <p>1店舗あたりの回答が10件未満の場合、1人の回答で平均が0.2前後動きます。平均の小さな差ではなく、回答の分布（1〜2を選んだ人が何人いるか）と自由記述を根拠に判断してください。</p>
   </div>`;
 
-  return head + stats + blockCards + qTable + voicePanel + trendHtml(periods) + reading;
+  return head + stats + blockCards + qTable + storeTableHtml(periodRecs, storesInData) + voicePanel + trendHtml(periods) + reading;
+}
+
+function storeTableHtml(periodRecs, storesInData){
+  if(storesInData.length < 2) return "";
+  const blocks = BLOCKS.filter(b => QUESTIONS.some(q => q.block===b.key && q.type==="scale"));
+  const rows = storesInData.map(s => {
+    const recs = periodRecs.filter(r => r.store === s);
+    const target = TARGETS[s] || null;
+    const cells = blocks.map(b => {
+      if(recs.length < minN) return `<td>—</td>`;
+      const m = blockStats(recs, b.key).mean;
+      return `<td>${m !== null ? m.toFixed(2) : "—"}</td>`;
+    }).join("");
+    return `<tr>
+      <td class="left">${escapeHtml(s)}</td>
+      <td>${recs.length}${target ? ` / ${target}` : ""}</td>
+      ${cells}
+    </tr>`;
+  }).join("");
+  return `<div class="panel">
+    <div class="panelHead"><h3 style="margin:0">店舗別</h3><span class="scoreTag">表示下限（${minN}人）未満の店舗は非表示</span></div>
+    <div class="tableWrap"><table>
+      <thead><tr><th class="left">店舗</th><th>回答数</th>${blocks.map(b=>`<th>${escapeHtml(b.name)}</th>`).join("")}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  </div>`;
 }
 
 function trendHtml(periods){
   const asc = [...periods].sort();
   if(asc.length < 2) return "";
   const blocks = BLOCKS.filter(b => QUESTIONS.some(q => q.block===b.key && q.type==="scale"));
+  const scopeName = dashStore === ALL ? "全店舗" : dashStore;
   const rows = asc.map(p => {
-    const recs = responses.filter(r => r.period === p);
+    const recs = responses.filter(r => r.period === p && (dashStore === ALL || r.store === dashStore));
     const cells = blocks.map(b => {
       if(recs.length < minN) return `<td>—</td>`;
       const m = blockStats(recs, b.key).mean;
@@ -575,7 +656,7 @@ function trendHtml(periods){
     return `<tr><td class="left">${formatPeriod(p)}</td><td>${recs.length}</td>${cells}</tr>`;
   }).join("");
   return `<div class="panel">
-    <h3>実施回ごとの推移</h3>
+    <div class="panelHead"><h3 style="margin:0">実施回ごとの推移</h3><span class="scoreTag">対象：${escapeHtml(scopeName)}</span></div>
     <div class="tableWrap"><table>
       <thead><tr><th class="left">実施回</th><th>回答数</th>${blocks.map(b=>`<th>${escapeHtml(b.name)}</th>`).join("")}</tr></thead>
       <tbody>${rows}</tbody>
@@ -584,10 +665,10 @@ function trendHtml(periods){
 }
 
 function exportCsv(){
-  const cols = ["実施回","送信日時"].concat(QUESTIONS.map(q => q.id));
+  const cols = ["実施回","店舗","送信日時"].concat(QUESTIONS.map(q => q.id));
   const lines = [cols.join(",")];
   responses.slice().sort((a,b)=>(a.ts||0)-(b.ts||0)).forEach(r => {
-    const row = [r.period, r.ts ? new Date(r.ts).toLocaleString("ja-JP") : ""]
+    const row = [r.period, r.store || "", r.ts ? new Date(r.ts).toLocaleString("ja-JP") : ""]
       .concat(QUESTIONS.map(q => (r.answers||{})[q.id] === undefined ? "" : String((r.answers||{})[q.id])));
     lines.push(row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(","));
   });
@@ -604,6 +685,8 @@ function exportCsv(){
    ============================================================ */
 
 function render(){
+  const logo = document.getElementById("brandLogo");
+  if(logo && logo.getAttribute("src") !== LOGO_URL) logo.setAttribute("src", LOGO_URL);
   document.getElementById("brandName").textContent = CONFIG.title;
   document.getElementById("tabSurvey").className = "tab" + (view === "survey" ? " active" : "");
   document.getElementById("tabAdmin").className = "tab" + (view === "admin" ? " active" : "");
