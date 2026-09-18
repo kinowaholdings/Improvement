@@ -92,11 +92,20 @@
   td.storeName { text-align:left; font-weight:600; color:#0f2e22; white-space:nowrap; }
   tr.totalRow td { background:#f8fafc; font-weight:700; }
   .revTag { font-size:9px; color:#b45309; background:#fef3c7; padding:1px 5px; border-radius:4px; margin-left:6px; white-space:nowrap; }
-  .distBar { display:flex; height:10px; border-radius:5px; overflow:hidden; background:#eef2f6; min-width:90px; }
+  .agTrack { display:inline-block; width:64px; height:7px; border-radius:4px; background:#eef2f6; overflow:hidden; }
+  .agFill { display:block; height:100%; border-radius:4px; }
   .tableWrap { overflow-x:auto; }
   .voice { border-left:3px solid #00B388; background:#f8fafc; border-radius:0 10px 10px 0; padding:12px 14px; margin-bottom:10px; font-size:14px; line-height:1.75; color:#334155; }
   .voiceMeta { font-size:11px; color:#94a3b8; margin-bottom:4px; }
   .protected { padding:24px; text-align:center; color:#94a3b8; font-size:13.5px; line-height:1.8; }
+  details.guide { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px 24px; margin-bottom:22px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  details.guide summary { cursor:pointer; font-weight:700; font-size:15px; color:#0f2e22; list-style:none; }
+  details.guide summary::-webkit-details-marker { display:none; }
+  details.guide summary::before { content:"▸ "; color:#00B388; }
+  details.guide[open] summary::before { content:"▾ "; }
+  details.guide .guideBody { margin-top:16px; }
+  .guideNote { font-size:12.5px; color:#64748b; line-height:1.8; margin-top:12px; }
+  .band { display:inline-block; padding:1px 8px; border-radius:6px; font-size:12px; font-weight:700; }
   .legend { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:#64748b; }
   .legendBar { width:120px; height:8px; border-radius:4px; background:linear-gradient(90deg,#ef4444,#f59e0b,#00B388); }
   .loginBox { max-width:380px; margin:60px auto; }
@@ -348,8 +357,34 @@ function questionStats(recs, q){
     unknownRate: answered ? unknown/answered : null,
     meanPlain: mean(plain),
     meanAdj: mean(adj),
-    positive: adj.length ? adj.filter(v=>v>=4).length/adj.length : null
+    positive: adj.length ? adj.filter(v=>v>=4).length/adj.length : null,
+    negativeCount: adj.filter(v=>v<=2).length,   // 評価方向で低い回答（1・2）の件数
+    agreement: agreementOf(plain),               // 反転しても分散は同じなので素点で計算
+    n: plain.length
   };
+}
+
+// 合意度（rWG）：回答のばらつきを、完全にランダムな場合の分散と比べた指標
+// 1.00に近い=全員が近い回答／0に近い=回答が割れている（James, Demaree & Wolf 1984）
+// 0.70以上を「一致している」と見るのが一般的な目安
+function agreementOf(values){
+  if(values.length < 2) return null;
+  const m = mean(values);
+  const v = values.reduce((a,x)=>a+(x-m)*(x-m),0) / (values.length - 1);
+  const expected = (SMAX*SMAX - 1) / 12; // 5段階なら2.00
+  return Math.max(0, 1 - v/expected);
+}
+function agreementColor(a){ if(a >= 0.70) return "#00B388"; if(a >= 0.50) return "#d97706"; return "#dc2626"; }
+function agreementLabel(a){ if(a >= 0.70) return "一致"; if(a >= 0.50) return "ばらつき"; return "割れている"; }
+
+// 設問ごとの合意度の平均（範囲全体の合意度）
+function agreementAvg(recs){
+  const vals = [];
+  QUESTIONS.filter(q => q.type === "scale").forEach(q => {
+    const a = questionStats(recs, q).agreement;
+    if(a !== null) vals.push(a);
+  });
+  return mean(vals);
 }
 
 function unknownRateOf(recs){
@@ -580,50 +615,56 @@ function dashboardHtml(){
     return head + `<div class="panel"><div class="protected">
       この範囲の回答は ${n}件です。表示下限（${minN}人）に達していないため、個人が特定されないよう集計を非表示にしています。<br>
       店舗を「全店舗」に切り替えるか、表示下限を変更してください。
-    </div></div>` + storeSummaryHtml(periodRecs, storesInData) + trendHtml(periods);
+    </div></div>` + guideHtml() + storeSummaryHtml(periodRecs, storesInData) + trendHtml(periods);
   }
 
   const target = targetOf(dashStore, recs);
   const rate = target ? Math.round(n / target * 1000)/10 : null;
   const ov = overallStats(recs);
   const uk = unknownRateOf(recs);
+  const agAll = agreementAvg(recs);
   const stats = `<div class="statRow">
     <div class="stat"><div class="statValue">${n}</div><div class="statLabel">回答数</div></div>
     <div class="stat"><div class="statValue">${rate !== null ? rate + "%" : "—"}</div><div class="statLabel">回答率${target ? `（対象${target}名）` : ""}</div></div>
     <div class="stat"><div class="statValue" style="color:${ov.mean !== null ? scoreColor(ov.mean) : "#94a3b8"}">${ov.mean !== null ? ov.mean.toFixed(2) : "—"}</div><div class="statLabel">全体平均 / 5${ov.mean !== null ? "（" + scoreLabel(ov.mean) + "）" : ""}</div></div>
     <div class="stat"><div class="statValue">${ov.positive !== null ? Math.round(ov.positive*100) + "%" : "—"}</div><div class="statLabel">肯定率（4・5の割合）</div></div>
+    <div class="stat"><div class="statValue" style="color:${agAll !== null ? agreementColor(agAll) : "#94a3b8"}">${agAll !== null ? agAll.toFixed(2) : "—"}</div><div class="statLabel">合意度${agAll !== null ? "（" + agreementLabel(agAll) + "）" : ""}</div></div>
     <div class="stat"><div class="statValue">${uk !== null ? Math.round(uk*100) + "%" : "—"}</div><div class="statLabel">わからない率</div></div>
   </div>`;
 
-  const distColors = ["#dc2626","#f97316","#cbd5e1","#5eead4","#00B388"];
   const qRows = QUESTIONS.filter(q => q.type === "scale").map((q, i) => {
     const s = questionStats(recs, q);
-    const total = s.dist.reduce((a,b)=>a+b,0);
-    const bar = total
-      ? s.dist.map((c,j) => c ? `<div style="width:${c/total*100}%;background:${distColors[j]}" title="${j+1}: ${c}人"></div>` : "").join("")
-      : "";
+    const ag = s.agreement;
     return `<tr>
       <td class="left">${i+1}${q.reverse ? `<span class="revTag">逆転</span>` : ""}</td>
       <td class="qtext">${escapeHtml(q.text)}</td>
-      <td><div class="distBar">${bar}</div></td>
-      <td>${s.meanPlain !== null ? s.meanPlain.toFixed(2) : "—"}</td>
       <td>${s.meanAdj !== null ? s.meanAdj.toFixed(2) : "—"}</td>
+      <td>
+        ${ag !== null ? `
+          <div style="display:flex;align-items:center;gap:8px;justify-content:center">
+            <span style="min-width:34px;text-align:right">${ag.toFixed(2)}</span>
+            <span class="agTrack"><span class="agFill" style="width:${Math.round(ag*100)}%;background:${agreementColor(ag)}"></span></span>
+          </div>
+          <div style="font-size:11px;color:${agreementColor(ag)};margin-top:2px">${agreementLabel(ag)}</div>` : "—"}
+      </td>
       <td>${s.positive !== null ? Math.round(s.positive*100) + "%" : "—"}</td>
+      <td>${s.negativeCount ? `<span style="color:#dc2626;font-weight:700">${s.negativeCount}</span>` : "0"}</td>
       <td>${q.unknown ? s.unknown + (s.unknownRate ? `（${Math.round(s.unknownRate*100)}%）` : "") : "—"}</td>
     </tr>`;
   }).join("");
 
   const qTable = `<div class="panel">
-    <div class="panelHead"><h3 style="margin:0">設問別</h3><span class="scoreTag">分布の色は 1(赤)→5(緑)</span></div>
+    <div class="panelHead"><h3 style="margin:0">設問別</h3><span class="scoreTag">合意度は1.00に近いほど回答が揃っている</span></div>
     <div class="tableWrap"><table>
       <thead><tr>
-        <th class="left">設問</th><th class="left">内容</th><th>回答分布</th>
-        <th>平均<br>(素点)</th><th>平均<br>(評価方向)</th><th>肯定率</th><th>わからない</th>
+        <th class="left">設問</th><th class="left">内容</th>
+        <th>平均<br>(評価方向)</th><th>合意度</th><th>肯定率</th><th>低評価<br>(1・2)</th><th>わからない</th>
       </tr></thead>
       <tbody>${qRows}</tbody>
     </table></div>
     <div class="note" style="margin-top:16px;border:none;padding:0">
-      設問5・6は「そう思う」ほど評価が悪いため、評価方向の平均では反転しています。「わからない」は平均から除外しており、この値が高い設問は評価が低いのではなく、内部委託に関わっていない人が多いと読みます。
+      <strong>合意度</strong>は回答のばらつきを指標化したものです（0〜1。0.70以上で「一致」、0.50未満は「割れている」）。平均が同じでも、全員が同じ回答なら合意度は高く、人によって答えが分かれていれば低くなります。<strong>平均が低い設問より、合意度が低い設問の方が先に手を打つ価値があります</strong>。特定の人だけが困っているサインだからです。<br>
+      <strong>低評価(1・2)</strong>は評価方向で低い回答の人数です。設問5・6は「そう思う」ほど評価が悪いため反転して数えています。<strong>わからない</strong>は平均から除外しており、値が高い設問は評価が低いのではなく、内部委託に関わっていない人が多いと読みます。
     </div>
   </div>`;
 
@@ -643,13 +684,8 @@ function dashboardHtml(){
     ${voices || `<div class="protected">記述回答はまだありません。</div>`}
   </div>`;
 
-  const reading = `<div class="note">
-    <strong>読み方</strong>
-    <p>1店舗あたりの回答が10件未満だと、1人の回答で平均が0.2前後動きます。平均の小さな差ではなく、回答の分布（1〜2を選んだ人が何人いるか）と自由記述を根拠に判断してください。</p>
-  </div>`;
-
-  return head + stats + qTable + storeSummaryHtml(periodRecs, storesInData)
-       + storeMatrixHtml(periodRecs, storesInData) + voicePanel + trendHtml(periods) + reading;
+  return head + stats + guideHtml() + qTable + storeSummaryHtml(periodRecs, storesInData)
+       + storeMatrixHtml(periodRecs, storesInData) + voicePanel + trendHtml(periods);
 }
 
 // 店舗別サマリ
@@ -659,33 +695,37 @@ function storeSummaryHtml(periodRecs, storesInData){
     const recs = periodRecs.filter(r => r.store === s);
     const target = TARGETS[s] || null;
     if(recs.length < minN){
-      return `<tr><td class="storeName">${escapeHtml(s)}</td><td>${recs.length}${target ? ` / ${target}` : ""}</td><td colspan="3" style="color:#94a3b8">表示下限（${minN}人）未満</td></tr>`;
+      return `<tr><td class="storeName">${escapeHtml(s)}</td><td>${recs.length}${target ? ` / ${target}` : ""}</td><td colspan="4" style="color:#94a3b8">表示下限（${minN}人）未満</td></tr>`;
     }
     const ov = overallStats(recs);
     const uk = unknownRateOf(recs);
+    const ag = agreementAvg(recs);
     return `<tr>
       <td class="storeName">${escapeHtml(s)}</td>
       <td>${recs.length}${target ? ` / ${target}` : ""}</td>
       <td style="background:${cellColor(ov.mean)}">${ov.mean !== null ? ov.mean.toFixed(2) : "—"}</td>
       <td>${ov.positive !== null ? Math.round(ov.positive*100) + "%" : "—"}</td>
+      <td style="color:${ag !== null ? agreementColor(ag) : "#94a3b8"}">${ag !== null ? ag.toFixed(2) : "—"}</td>
       <td>${uk !== null ? Math.round(uk*100) + "%" : "—"}</td>
     </tr>`;
   }).join("");
 
   const all = overallStats(periodRecs);
   const allUk = unknownRateOf(periodRecs);
+  const allAg = agreementAvg(periodRecs);
   const totalRow = storesInData.length > 1 ? `<tr class="totalRow">
       <td class="storeName">全店舗</td>
       <td>${periodRecs.length}</td>
       <td>${all.mean !== null ? all.mean.toFixed(2) : "—"}</td>
       <td>${all.positive !== null ? Math.round(all.positive*100) + "%" : "—"}</td>
+      <td>${allAg !== null ? allAg.toFixed(2) : "—"}</td>
       <td>${allUk !== null ? Math.round(allUk*100) + "%" : "—"}</td>
     </tr>` : "";
 
   return `<div class="panel">
     <div class="panelHead"><h3 style="margin:0">店舗別サマリ</h3><span class="scoreTag">この月の全店舗が対象（上の店舗フィルタの影響を受けません）</span></div>
     <div class="tableWrap"><table>
-      <thead><tr><th class="left">店舗</th><th>回答数</th><th>全体平均</th><th>肯定率</th><th>わからない率</th></tr></thead>
+      <thead><tr><th class="left">店舗</th><th>回答数</th><th>全体平均</th><th>肯定率</th><th>合意度</th><th>わからない率</th></tr></thead>
       <tbody>${rows}${totalRow}</tbody>
     </table></div>
   </div>`;
@@ -715,6 +755,38 @@ function storeMatrixHtml(periodRecs, storesInData){
     </table></div>
     <div class="legend"><span>低い</span><span class="legendBar"></span><span>高い</span><span style="margin-left:10px">列番号は設問番号（見出しにカーソルを当てると設問文が出ます）</span></div>
   </div>`;
+}
+
+// 数値の見方（ダッシュボード内ガイド）
+function guideHtml(){
+  const rows = [
+    ["回答数・回答率", "対象人数に対する回答の割合", `<span class="band" style="background:#e8f5ef;color:#00806a">80%以上</span> 判断に使える<br><span class="band" style="background:#fef3c7;color:#92400e">50〜80%</span> 傾向として参考<br><span class="band" style="background:#fef2f2;color:#b91c1c">50%未満</span> 結論を出さない`, "低い場合は数値ではなく回収の呼びかけを優先する"],
+    ["全体平均 / 設問平均", "5点満点。逆転項目は評価方向に揃えた値", `<span class="band" style="background:#e8f5ef;color:#00806a">3.80以上</span> 良好<br><span class="band" style="background:#fef3c7;color:#92400e">3.00〜3.80</span> 要観察<br><span class="band" style="background:#fef2f2;color:#b91c1c">3.00未満</span> 要介入`, "3.00未満の設問は、原因を自由記述と現場確認で特定する"],
+    ["肯定率", "4・5を選んだ回答の割合", `<span class="band" style="background:#e8f5ef;color:#00806a">70%以上</span> 定着<br><span class="band" style="background:#fef3c7;color:#92400e">40〜70%</span> 浸透途上<br><span class="band" style="background:#fef2f2;color:#b91c1c">40%未満</span> 未浸透`, "認知の設問（1・2）が低ければ、まず周知から着手する"],
+    ["合意度", "回答のばらつき（0〜1）。1.00に近いほど全員の認識が揃っている", `<span class="band" style="background:#e8f5ef;color:#00806a">0.70以上</span> 一致<br><span class="band" style="background:#fef3c7;color:#92400e">0.50〜0.70</span> ばらつき<br><span class="band" style="background:#fef2f2;color:#b91c1c">0.50未満</span> 割れている`, "平均が同じでも、合意度が低い設問を先に見る。特定の人だけが困っているサイン"],
+    ["低評価(1・2)", "評価方向で低い回答の人数", `<span class="band" style="background:#fef2f2;color:#b91c1c">1件以上</span> 要確認`, "件数が少なくても放置しない。自由記述と突き合わせる"],
+    ["わからない", "「わからない・関わっていない」を選んだ人数（設問3〜6のみ）", `<span class="band" style="background:#eef2f6;color:#475569">40%超</span> 関与者が限られている`, "評価が悪いのではない。委託に関わる人を増やすか、対象者を絞って配布する"]
+  ].map(r => `<tr>
+      <td class="left" style="font-weight:700;white-space:nowrap">${r[0]}</td>
+      <td class="qtext" style="min-width:160px">${r[1]}</td>
+      <td class="left" style="line-height:1.9">${r[2]}</td>
+      <td class="qtext">${r[3]}</td>
+    </tr>`).join("");
+
+  return `<details class="guide">
+    <summary>数値の見方（判断の目安）</summary>
+    <div class="guideBody">
+      <div class="tableWrap"><table>
+        <thead><tr><th class="left">指標</th><th class="left">意味</th><th class="left">目安</th><th class="left">目安を下回ったときの動き</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      <div class="guideNote">
+        合意度の0.70は組織調査で一般的に使われる基準です（rWG。James, Demaree &amp; Wolf 1984）。それ以外のしきい値は運用上の目安で、絶対的な基準ではありません。<br>
+        回答が1店舗10件未満の場合、1人の回答で平均が0.2前後動きます。平均の小さな差を議論するより、合意度・低評価件数・自由記述を根拠にしてください。<br>
+        設問5・6は「そう思う」ほど状況が悪い設問です。平均・肯定率・低評価件数はすべて反転して計算しています。
+      </div>
+    </div>
+  </details>`;
 }
 
 function trendHtml(periods){
