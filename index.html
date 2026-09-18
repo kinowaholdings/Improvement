@@ -143,41 +143,30 @@ const TARGETS = { "くりの木": 7 };
 const MIN_N = 3; // この人数未満は集計を表示しない(個人特定の防止)
 let minN = MIN_N;
 
-// ブロック(表示順=この配列の順)
+// 設問グループ（素案は分類なしのため1つだけ。回答画面には見出しを出さない）
 const BLOCKS = [
-  { key:"A", name:"医療連携チームと内部委託の認知" },
-  { key:"B", name:"委託の品質" },
-  { key:"C", name:"効果の実感" },
-  { key:"D", name:"今後の展開" },
-  { key:"E", name:"自由記述" }
+  { key:"Q", name:"全体" }
 ];
 
-// 設問。type: scale(5段階) / text(記述)
-// reverse:true = 「そう思う」ほど評価が悪い設問(集計時に反転)
+// 設問（素案の設問1〜11に準拠。文言・並び順は素案どおり）
+// reverse:true = 「そう思う」ほど評価が悪い設問（集計時のみ反転。回答画面の見た目は他と同じ）
 // unknown:true = 「わからない・関わっていない」を選べる
-// cond = 表示条件(その設問がop/vを満たしたときだけ表示)
 const QUESTIONS = [
-  { id:"A1", block:"A", type:"scale", text:"社内に「医療連携チーム」という部門があることを知っている", required:true },
-  { id:"A2", block:"A", type:"scale", text:"内部委託業務が何を目的に行われているか知っている", required:true },
-
-  { id:"B1", block:"B", type:"scale", text:"納品された予製の仕上がりに満足している", required:true, unknown:true },
-  { id:"B2", block:"B", type:"scale", text:"依頼から納品までの期間に満足している", required:true, unknown:true },
-  { id:"B3", block:"B", type:"scale", text:"納品後に修正・やり直し・追加対応が発生することが多い", required:true, unknown:true, reverse:true },
-  { id:"B4", block:"B", type:"scale", text:"内部委託に伴う確認や連絡が、新たな手間になっている", required:true, unknown:true, reverse:true },
-
-  { id:"C1", block:"C", type:"scale", text:"内部委託が始まって、業務負担が軽くなったと実感している", required:true },
-  { id:"C2", block:"C", type:"scale", text:"患者対応や施設対応など、本来優先したい業務に集中しやすくなった", required:true },
-  { id:"C3", block:"C", type:"scale", text:"新しい業務や、これまで手が回らなかった業務に取り組めるようになった", required:true },
-  { id:"C3T", block:"C", type:"text", text:"具体的にどのような業務に取り組めるようになりましたか", required:false, cond:{ id:"C3", op:">=", v:4 } },
-
-  { id:"D1", block:"D", type:"scale", text:"現在委託している施設以外の予製も、内部委託したい", required:true },
-  { id:"D1T", block:"D", type:"text", text:"そう思わない理由を教えてください", required:false, cond:{ id:"D1", op:"<=", v:2 } },
-
-  { id:"E1", block:"E", type:"text", text:"内部委託について、改善してほしい点があれば教えてください", required:false }
+  { id:"Q1",  block:"Q", type:"scale", text:"医療連携チームという部門が社内にあると知っている", required:true },
+  { id:"Q2",  block:"Q", type:"scale", text:"内部委託業務がどのような目的で動いているか知っている", required:true },
+  { id:"Q3",  block:"Q", type:"scale", text:"内部委託業務により、納品された予製は満足する仕上がりである", required:true, unknown:true },
+  { id:"Q4",  block:"Q", type:"scale", text:"依頼から納品までに要する期間に満足している", required:true, unknown:true },
+  { id:"Q5",  block:"Q", type:"scale", text:"委託後に、修正・やり直し・追加対応が発生することがある", required:true, unknown:true, reverse:true },
+  { id:"Q6",  block:"Q", type:"scale", text:"内部委託に伴う確認や連絡が、新たな手間になっている", required:true, unknown:true, reverse:true },
+  { id:"Q7",  block:"Q", type:"scale", text:"内部委託業務が始まって業務負担が軽減したと実感できる", required:true },
+  { id:"Q8",  block:"Q", type:"scale", text:"日昇ガーデン以外の施設予製も内部委託を行いたいと考えている", required:true },
+  { id:"Q9",  block:"Q", type:"scale", text:"患者対応や施設対応など、本来優先したい業務に集中しやすくなった", required:true },
+  { id:"Q10", block:"Q", type:"scale", text:"内部委託業務を依頼してから新しい業務・今までできなかった業務へ取り組むことができる", required:true },
+  { id:"Q11", block:"Q", type:"text",  text:"10で答えた業務について具体的に記述してください", required:false }
 ];
 
 const SCALE = [
-  { v:1, label:"全くそう思わない" },
+  { v:1, label:"全くそうは思わない" },
   { v:2, label:"あまりそう思わない" },
   { v:3, label:"どちらでもない" },
   { v:4, label:"ややそう思う" },
@@ -374,7 +363,7 @@ function surveyHtml(){
   BLOCKS.forEach(b => {
     const qs = visible.filter(q => q.block === b.key);
     if(!qs.length) return;
-    body += `<div class="secLabel">${escapeHtml(b.name)}</div>`;
+    if(BLOCKS.length > 1) body += `<div class="secLabel">${escapeHtml(b.name)}</div>`;
     qs.forEach(q => { body += questionCardHtml(q); });
   });
 
@@ -540,7 +529,7 @@ function dashboardHtml(){
   </div>`;
 
   const blockCards = `<div class="panel">
-    <div class="panelHead"><h3 style="margin:0">ブロック別スコア</h3><span class="scoreTag">逆転項目は評価方向に揃えて計算（5点満点）</span></div>
+    <div class="panelHead"><h3 style="margin:0">${BLOCKS.length > 1 ? "ブロック別スコア" : "全体スコア"}</h3><span class="scoreTag">逆転項目は評価方向に揃えて計算（5点満点）</span></div>
     <div class="cardGrid">
       ${BLOCKS.filter(b => QUESTIONS.some(q => q.block===b.key && q.type==="scale")).map(b => {
         const s = blockStats(recs, b.key);
