@@ -191,12 +191,14 @@ function currentPeriod(){
   return now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0");
 }
 
-// 回答者が選べる実施月：当月＋過去11ヶ月（新しい順）。初期値は当月
+// 回答者が選べる実施月：前月〜先12ヶ月（古い順）。初期値は当月
+const PERIOD_AHEAD = 12;  // 当月より先に選べる月数
+const PERIOD_BACK = 1;    // 当月より前に選べる月数
 function periodOptions(){
   const now = new Date();
   const out = [];
-  for(let i = 0; i < 12; i++){
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+  for(let i = -PERIOD_BACK; i <= PERIOD_AHEAD; i++){
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
     out.push(d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0"));
   }
   return out;
