@@ -11,14 +11,14 @@
   body { background:#f4f7fb; color:#1f2d3d; font-family:'Zen Maru Gothic','Hiragino Sans',sans-serif; }
   button { font-family:inherit; cursor:pointer; }
   button:hover { filter:brightness(0.97); }
-  select { font-family:inherit; background:#fff; color:#1f2d3d; border:1px solid #cbd5e1; border-radius:8px; padding:9px 12px; font-size:14px; }
+  select { font-family:inherit; background:#fff; color:#1f2d3d; border:1px solid #cbd5e1; border-radius:8px; padding:9px 12px; font-size:14px; max-width:100%; }
   select:focus, button:focus-visible { outline:2px solid #00B388; outline-offset:1px; }
   input[type=password] { font-family:inherit; font-size:15px; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; width:100%; }
 
-  header { display:flex; align-items:center; gap:20px; padding:14px 28px; background:#fff; border-bottom:1px solid #e2e8f0; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  header { display:flex; align-items:center; gap:18px; padding:14px 28px; background:#fff; border-bottom:1px solid #e2e8f0; flex-wrap:wrap; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
   .brand { display:flex; align-items:center; gap:14px; }
   .brandLogo { height:40px; width:auto; display:block; }
-  .brandFallback { font-weight:700; font-size:17px; color:#0f2e22; letter-spacing:.02em; }
+  .brandFallback { font-weight:700; font-size:17px; color:#0f2e22; }
   .brandDiv { width:1px; height:30px; background:#e2e8f0; }
   .brandName { font-weight:700; font-size:14.5px; color:#0f2e22; }
   .brandSub { font-size:11.5px; color:#64748b; }
@@ -27,27 +27,38 @@
   .tab.active { background:#e8f5ef; color:#00B388; }
   main { max-width:960px; margin:0 auto; padding:32px 24px 80px; }
   footer { text-align:center; padding:16px; font-size:12px; color:#94a3b8; border-top:1px solid #e2e8f0; background:#fff; }
+  @media(max-width:560px){
+    header { padding:12px 16px; gap:12px; }
+    main { padding:24px 16px 72px; }
+    .brandSub { display:none; }
+  }
 
-  h1 { font-size:29px; line-height:1.35; margin-bottom:16px; font-weight:700; color:#0f2e22; }
-  h2 { font-size:22px; font-weight:700; color:#0f2e22; }
+  h1 { font-size:28px; line-height:1.35; margin-bottom:16px; font-weight:700; color:#0f2e22; }
+  h2 { font-size:21px; font-weight:700; color:#0f2e22; }
   h3 { font-size:16px; margin-bottom:14px; font-weight:700; color:#334155; }
   .lead { color:#52677d; line-height:1.9; font-size:15px; }
-  .metaChips { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 8px; }
+  .metaChips { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 20px; }
   .chip { font-size:12px; color:#52677d; background:#fff; border:1px solid #e2e8f0; border-radius:999px; padding:5px 12px; }
 
-  .secLabel { font-size:12px; font-weight:700; color:#00B388; margin:26px 0 8px; letter-spacing:.04em; }
   .qCard { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:20px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
   .qCard.invalid { border-color:#dc2626; }
   .qNum { font-size:12px; color:#00B388; font-weight:700; margin-bottom:6px; }
   .qText { font-size:15px; margin-bottom:16px; line-height:1.6; color:#1f2d3d; }
   .optTag { font-size:10px; color:#64748b; background:#f1f5f9; padding:2px 7px; border-radius:4px; margin-left:8px; }
   .reqTag { font-size:10px; color:#dc2626; background:#fef2f2; padding:2px 7px; border-radius:4px; margin-left:8px; }
+  .selRow { display:flex; gap:12px; flex-wrap:wrap; }
+  .selField { display:flex; flex-direction:column; gap:6px; flex:1; min-width:190px; }
+  .selLabel { font-size:12.5px; color:#52677d; font-weight:600; }
   .scaleRow { display:flex; gap:6px; }
   .scaleBtn { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:4px; padding:10px 2px; border-radius:10px; border:1.5px solid #e2e8f0; background:#f8fafc; color:#64748b; transition:all .15s; }
   .scaleBtn.active { border-color:#00B388; background:#e8f5ef; color:#00B388; }
   .scaleNum { font-size:16px; font-weight:700; }
   .scaleLbl { font-size:9.5px; text-align:center; line-height:1.15; }
-  @media(max-width:560px){ .scaleLbl { display:none; } }
+  .scaleEnds { display:none; justify-content:space-between; font-size:11px; color:#94a3b8; margin-top:6px; }
+  @media(max-width:560px){
+    .scaleLbl { display:none; }
+    .scaleEnds { display:flex; }
+  }
   .unknownRow { margin-top:10px; }
   .unknownBtn { background:#fff; color:#64748b; border:1px solid #cbd5e1; border-radius:999px; padding:7px 14px; font-size:12.5px; }
   .unknownBtn.active { background:#0f2e22; border-color:#0f2e22; color:#fff; }
@@ -68,31 +79,26 @@
   .empty { background:#fff; border:1px dashed #cbd5e1; border-radius:14px; padding:40px; text-align:center; color:#94a3b8; font-size:14px; }
   .dashHead { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:12px; }
   .statRow { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:22px; }
-  .stat { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px 26px; text-align:center; min-width:130px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .stat { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px 26px; text-align:center; min-width:120px; flex:1; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
   .statValue { font-size:26px; font-weight:700; color:#00B388; font-variant-numeric:tabular-nums; }
   .statLabel { font-size:12px; color:#64748b; margin-top:4px; }
-  .cardGrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
-  .scoreCard { background:#fff; border:1px solid #e2e8f0; border-radius:14px; padding:18px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
-  .scoreCardTop { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:8px; }
-  .blockName { font-weight:700; font-size:14px; color:#0f2e22; }
-  .nBadge { font-size:11px; color:#64748b; background:#f1f5f9; padding:2px 8px; border-radius:6px; white-space:nowrap; }
-  .bigScore { font-size:34px; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; }
-  .scoreUnit { font-size:13px; font-weight:600; color:#94a3b8; margin-left:4px; }
-  .scoreBarTrack { height:6px; background:#eef2f6; border-radius:3px; margin-top:12px; overflow:hidden; }
-  .scoreBarFill { height:100%; border-radius:3px; }
-  .scoreTag { font-size:12px; color:#64748b; margin-top:8px; }
+  .scoreTag { font-size:12px; color:#64748b; }
 
   table { width:100%; border-collapse:collapse; font-size:13px; }
   th { padding:8px 6px; color:#64748b; font-weight:600; border-bottom:1px solid #e2e8f0; text-align:center; white-space:nowrap; }
   th.left, td.left { text-align:left; }
   td { padding:8px 6px; text-align:center; border-bottom:1px solid #eef2f6; color:#1f2d3d; font-variant-numeric:tabular-nums; }
-  td.qtext { text-align:left; color:#334155; line-height:1.5; }
+  td.qtext { text-align:left; color:#334155; line-height:1.5; min-width:220px; }
+  td.storeName { text-align:left; font-weight:600; color:#0f2e22; white-space:nowrap; }
+  tr.totalRow td { background:#f8fafc; font-weight:700; }
   .revTag { font-size:9px; color:#b45309; background:#fef3c7; padding:1px 5px; border-radius:4px; margin-left:6px; white-space:nowrap; }
   .distBar { display:flex; height:10px; border-radius:5px; overflow:hidden; background:#eef2f6; min-width:90px; }
   .tableWrap { overflow-x:auto; }
   .voice { border-left:3px solid #00B388; background:#f8fafc; border-radius:0 10px 10px 0; padding:12px 14px; margin-bottom:10px; font-size:14px; line-height:1.75; color:#334155; }
   .voiceMeta { font-size:11px; color:#94a3b8; margin-bottom:4px; }
   .protected { padding:24px; text-align:center; color:#94a3b8; font-size:13.5px; line-height:1.8; }
+  .legend { display:flex; align-items:center; gap:8px; margin-top:14px; font-size:12px; color:#64748b; }
+  .legendBar { width:120px; height:8px; border-radius:4px; background:linear-gradient(90deg,#ef4444,#f59e0b,#00B388); }
   .loginBox { max-width:380px; margin:60px auto; }
 </style>
 </head>
@@ -100,6 +106,7 @@
 <header>
   <div class="brand">
     <img class="brandLogo" id="brandLogo" alt="木の和ホールディングス"
+         src="https://kinowahd.jp/wp/wp-content/uploads/2026/02/logo_yoko-1.png"
          onerror="this.outerHTML='<span class=\'brandFallback\'>KINOWA Holdings</span>'">
     <span class="brandDiv"></span>
     <div>
@@ -117,16 +124,15 @@
 
 <script>
 /* ============================================================
-   設定（ここだけ書き替えれば他の店舗・他のテーマでも使えます）
+   設定（ここだけ書き替えれば他店舗・他テーマでも使えます）
    ============================================================ */
 
-// ▼ Apps Script のデプロイURL(...exec)をここに貼ってください
 const API_URL = "https://script.google.com/macros/s/AKfycbyIl10ZACuZP1W_WxOTR2iDCmlWGczc9TTddJGppY78Q-XDqvB_VduBOX5olQtzIDC-/exec";
 const USE_REMOTE = API_URL && !API_URL.startsWith("PASTE_");
 
 const ADMIN_PASSWORD = "kinowa1001";
 
-// ロゴ。自前のリポジトリに置く場合は "logo.png" のような相対パスに変更してください
+// ロゴ。自前で同梱する場合は "logo.png" のような相対パスに変更（HTML冒頭のimg srcも同じ値に）
 const LOGO_URL = "https://kinowahd.jp/wp/wp-content/uploads/2026/02/logo_yoko-1.png";
 
 const CONFIG = {
@@ -137,7 +143,7 @@ const CONFIG = {
 // 対象店舗。1つだけにすると店舗選択欄は表示されず、その店舗に固定されます
 const STORES = ["ケアの木", "くりの木", "ゆずの木", "ほしの木", "そらの木", "さくらの木", "お茶の木", "はれの木", "にじの木", "サン薬局", "つばくろ"];
 
-// 店舗ごとの対象人数（回答率の分母）。不明な店舗は空欄のままで構いません
+// 店舗ごとの対象人数（回答率の分母）。不明な店舗は未記入で構いません
 const TARGETS = { "くりの木": 7 };
 
 const MIN_N = 3; // この人数未満は集計を表示しない(個人特定の防止)
@@ -177,16 +183,27 @@ const UNKNOWN = "わからない";
 const ALL = "__all__";
 
 /* ============================================================
-   実施回(自動判定)
+   実施月
    ============================================================ */
 
-// 実施回IDは送信時の年月から自動で決まる。手で設定する項目はない。
 function currentPeriod(){
   const now = new Date();
   return now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0");
 }
+
+// 回答者が選べる実施月：当月＋過去11ヶ月（新しい順）。初期値は当月
+function periodOptions(){
+  const now = new Date();
+  const out = [];
+  for(let i = 0; i < 12; i++){
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    out.push(d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0"));
+  }
+  return out;
+}
+
 function formatPeriod(p){
-  const m = String(p).match(/^(\d{4})-(\d{2})/);
+  const m = String(p).match(/^(\d{4})-(\d{1,2})/);
   return m ? (m[1] + "年" + Number(m[2]) + "月") : String(p);
 }
 
@@ -202,6 +219,7 @@ async function loadResponses(){
   if(!USE_REMOTE){
     try { responses = JSON.parse(localStorage.getItem("naibu_itaku_survey_v1") || "[]"); }
     catch(e){ responses = []; }
+    render();
     return;
   }
   dataLoading = true; dataLoadError = null; render();
@@ -246,7 +264,14 @@ let view = "survey";
 let isAdminMode = false;
 let dashPeriod = null;
 let dashStore = ALL;
-let surveyState = { store: STORES.length === 1 ? STORES[0] : "", answers:{}, done:false, sending:false, showErrors:false };
+let surveyState = {
+  store: STORES.length === 1 ? STORES[0] : "",
+  period: currentPeriod(),
+  answers: {},
+  done: false,
+  sending: false,
+  showErrors: false
+};
 
 function setView(v){ view = v; render(); window.scrollTo(0,0); }
 
@@ -268,6 +293,16 @@ function mean(arr){ return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : nu
 function scoreColor(v){ if(v >= 3.8) return "#00B388"; if(v >= 3.0) return "#d97706"; return "#dc2626"; }
 function scoreLabel(v){ if(v >= 3.8) return "良好"; if(v >= 3.0) return "要観察"; return "要介入"; }
 
+// 1(赤)→5(緑)のセル色
+function cellColor(v){
+  if(v === null || v === undefined) return "#f8fafc";
+  const t = Math.max(0, Math.min(1, (v - 1) / (SMAX - 1)));
+  const r = Math.round(239 - t*(239-31));
+  const g = Math.round(68 + t*(157-68));
+  const b = Math.round(68 + t*(107-68));
+  return `rgba(${r},${g},${b},0.16)`;
+}
+
 function condMet(cond, answers){
   if(!cond) return true;
   const raw = answers[cond.id];
@@ -281,8 +316,8 @@ function condMet(cond, answers){
   return a === cond.v;
 }
 
-function blockStats(recs, blockKey){
-  const qs = QUESTIONS.filter(q => q.block === blockKey && q.type === "scale");
+function overallStats(recs){
+  const qs = QUESTIONS.filter(q => q.type === "scale");
   const vals = [];
   recs.forEach(r => qs.forEach(q => {
     const v = adjusted(q, (r.answers||{})[q.id]);
@@ -315,11 +350,23 @@ function questionStats(recs, q){
   };
 }
 
-function targetOf(store){
+function unknownRateOf(recs){
+  const qs = QUESTIONS.filter(q => q.type === "scale" && q.unknown);
+  let unknown = 0, total = 0;
+  recs.forEach(r => qs.forEach(q => {
+    const raw = (r.answers||{})[q.id];
+    if(raw === undefined || raw === null || raw === "") return;
+    total++;
+    if(raw === UNKNOWN) unknown++;
+  }));
+  return total ? unknown/total : null;
+}
+
+function targetOf(store, recs){
   if(store === ALL){
-    const stores = [...new Set(responses.map(r => r.store).filter(Boolean))];
+    const stores = [...new Set(recs.map(r => r.store).filter(Boolean))];
     const vals = stores.map(s => TARGETS[s]).filter(v => v);
-    return vals.length === stores.length && vals.length ? vals.reduce((a,b)=>a+b,0) : null;
+    return (stores.length && vals.length === stores.length) ? vals.reduce((a,b)=>a+b,0) : null;
   }
   return TARGETS[store] || null;
 }
@@ -346,26 +393,30 @@ function surveyHtml(){
   let missing = requiredVisible.length - answeredCount;
   if(!surveyState.store) missing += 1;
 
-  let storeCard = "";
-  if(STORES.length > 1){
-    const invalid = surveyState.showErrors && !surveyState.store;
-    storeCard = `<div class="qCard ${invalid ? "invalid" : ""}" id="card-store">
-      <div class="qNum">所属<span class="reqTag">必須</span></div>
-      <div class="qText">お勤めの店舗を選んでください</div>
+  const storeInvalid = surveyState.showErrors && !surveyState.store;
+  const storeField = STORES.length > 1 ? `
+    <div class="selField">
+      <span class="selLabel">店舗<span class="reqTag">必須</span></span>
       <select onchange="pickStore(this.value)">
         <option value="">選択してください</option>
         ${STORES.map(s => `<option value="${escapeHtml(s)}" ${surveyState.store===s?"selected":""}>${escapeHtml(s)}</option>`).join("")}
       </select>
+    </div>` : "";
+  const periodField = `
+    <div class="selField">
+      <span class="selLabel">実施月</span>
+      <select onchange="pickPeriod(this.value)">
+        ${periodOptions().map(p => `<option value="${p}" ${surveyState.period===p?"selected":""}>${formatPeriod(p)}</option>`).join("")}
+      </select>
     </div>`;
-  }
 
-  let body = "";
-  BLOCKS.forEach(b => {
-    const qs = visible.filter(q => q.block === b.key);
-    if(!qs.length) return;
-    if(BLOCKS.length > 1) body += `<div class="secLabel">${escapeHtml(b.name)}</div>`;
-    qs.forEach(q => { body += questionCardHtml(q); });
-  });
+  const headCard = `<div class="qCard ${storeInvalid ? "invalid" : ""}" id="card-head">
+    <div class="qNum">はじめに</div>
+    <div class="qText">ご所属と、回答対象の月を確認してください。</div>
+    <div class="selRow">${storeField}${periodField}</div>
+  </div>`;
+
+  const body = visible.map(q => questionCardHtml(q)).join("");
 
   const btn = surveyState.sending
     ? `<button class="disabledBtn">送信しています…</button>`
@@ -377,9 +428,9 @@ function surveyHtml(){
     <div class="metaChips">
       <span class="chip">匿名回答</span>
       <span class="chip">所要時間 約3分</span>
-      <span class="chip">対象月 ${formatPeriod(currentPeriod())}</span>
+      <span class="chip">全${QUESTIONS.length}問</span>
     </div>
-    ${storeCard ? `<div class="secLabel">はじめに</div>` + storeCard : ""}
+    ${headCard}
     ${body}
     <div class="submitRow">
       ${btn}
@@ -392,7 +443,7 @@ function surveyHtml(){
 function questionCardHtml(q){
   const val = surveyState.answers[q.id];
   const invalid = surveyState.showErrors && q.required && (val === undefined || val === null || String(val) === "");
-  const num = q.id.replace(/T$/, "");
+  const num = QUESTIONS.filter(x => x.type === "scale" || x.type === "text").indexOf(q) + 1;
   const tag = q.required ? "" : `<span class="optTag">任意</span>`;
 
   let control = "";
@@ -402,7 +453,8 @@ function questionCardHtml(q){
         <span class="scaleNum">${s.v}</span>
         <span class="scaleLbl">${s.label}</span>
       </button>`).join("");
-    control = `<div class="scaleRow">${btns}</div>`;
+    control = `<div class="scaleRow">${btns}</div>
+      <div class="scaleEnds"><span>${SCALE[0].label}</span><span>${SCALE[SMAX-1].label}</span></div>`;
     if(q.unknown){
       control += `<div class="unknownRow">
         <button class="unknownBtn ${val===UNKNOWN ? "active" : ""}" onclick="pick('${q.id}','${UNKNOWN}')">わからない・関わっていない</button>
@@ -413,17 +465,17 @@ function questionCardHtml(q){
   }
 
   return `<div class="qCard ${invalid ? "invalid" : ""}" id="card-${q.id}">
-    <div class="qNum">${num}${tag}</div>
+    <div class="qNum">設問${num}${tag}</div>
     <div class="qText">${escapeHtml(q.text)}</div>
     ${control}
   </div>`;
 }
 
 function pickStore(v){ surveyState.store = v; render(); }
+function pickPeriod(v){ surveyState.period = v; }
 
 function pick(id, v){
   surveyState.answers[id] = v;
-  // 表示条件を満たさなくなった設問の回答は破棄する
   QUESTIONS.forEach(q => {
     if(q.cond && !condMet(q.cond, surveyState.answers)) delete surveyState.answers[q.id];
   });
@@ -433,9 +485,10 @@ function pick(id, v){
 function typeText(id, v){ surveyState.answers[id] = v; }
 
 async function handleSubmit(){
+  if(surveyState.sending || surveyState.done) return; // 二重送信の防止
   if(!surveyState.store){
     surveyState.showErrors = true; render();
-    const el = document.getElementById("card-store");
+    const el = document.getElementById("card-head");
     if(el) el.scrollIntoView({ block:"center" });
     return;
   }
@@ -453,7 +506,12 @@ async function handleSubmit(){
   }
 
   surveyState.sending = true; render();
-  const rec = { store: surveyState.store, period: currentPeriod(), ts: Date.now(), answers: surveyState.answers };
+  const rec = {
+    store: surveyState.store,
+    period: surveyState.period || currentPeriod(),
+    ts: Date.now(),
+    answers: surveyState.answers
+  };
   const ok = await submitResponse(rec);
   surveyState.sending = false;
   if(ok) surveyState.done = true;
@@ -485,11 +543,14 @@ function dashboardHtml(){
   if(dataLoadError) return `<div class="empty">データを取得できませんでした。<br>${escapeHtml(dataLoadError)}<br><br><button class="ghostBtn" onclick="loadResponses()">再読み込み</button></div>`;
   if(!responses.length) return `<div class="empty">まだ回答がありません。</div>`;
 
-  const periods = [...new Set(responses.map(r => r.period))].sort().reverse();
+  const periods = [...new Set(responses.map(r => r.period).filter(Boolean))].sort().reverse();
   if(!dashPeriod || periods.indexOf(dashPeriod) === -1) dashPeriod = periods[0];
   const periodRecs = responses.filter(r => r.period === dashPeriod);
   const storesInData = [...new Set(periodRecs.map(r => r.store).filter(Boolean))]
-    .sort((a,b) => STORES.indexOf(a) - STORES.indexOf(b));
+    .sort((a,b) => {
+      const ia = STORES.indexOf(a), ib = STORES.indexOf(b);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
   if(dashStore !== ALL && storesInData.indexOf(dashStore) === -1) dashStore = ALL;
   const recs = dashStore === ALL ? periodRecs : periodRecs.filter(r => r.store === dashStore);
   const n = recs.length;
@@ -517,52 +578,36 @@ function dashboardHtml(){
     return head + `<div class="panel"><div class="protected">
       この範囲の回答は ${n}件です。表示下限（${minN}人）に達していないため、個人が特定されないよう集計を非表示にしています。<br>
       店舗を「全店舗」に切り替えるか、表示下限を変更してください。
-    </div></div>` + storeTableHtml(periodRecs, storesInData) + trendHtml(periods);
+    </div></div>` + storeSummaryHtml(periodRecs, storesInData) + trendHtml(periods);
   }
 
-  const target = targetOf(dashStore);
+  const target = targetOf(dashStore, recs);
   const rate = target ? Math.round(n / target * 1000)/10 : null;
+  const ov = overallStats(recs);
+  const uk = unknownRateOf(recs);
   const stats = `<div class="statRow">
     <div class="stat"><div class="statValue">${n}</div><div class="statLabel">回答数</div></div>
-    <div class="stat"><div class="statValue">${target || "—"}</div><div class="statLabel">対象人数</div></div>
-    <div class="stat"><div class="statValue">${rate !== null ? rate + "%" : "—"}</div><div class="statLabel">回答率</div></div>
-  </div>`;
-
-  const blockCards = `<div class="panel">
-    <div class="panelHead"><h3 style="margin:0">${BLOCKS.length > 1 ? "ブロック別スコア" : "全体スコア"}</h3><span class="scoreTag">逆転項目は評価方向に揃えて計算（5点満点）</span></div>
-    <div class="cardGrid">
-      ${BLOCKS.filter(b => QUESTIONS.some(q => q.block===b.key && q.type==="scale")).map(b => {
-        const s = blockStats(recs, b.key);
-        const m = s.mean;
-        const color = m !== null ? scoreColor(m) : "#94a3b8";
-        return `<div class="scoreCard">
-          <div class="scoreCardTop">
-            <span class="blockName">${escapeHtml(b.name)}</span>
-            <span class="nBadge">${s.count}問</span>
-          </div>
-          <div class="bigScore" style="color:${color}">${m !== null ? m.toFixed(2) : "—"}<span class="scoreUnit">/5</span></div>
-          <div class="scoreBarTrack"><div class="scoreBarFill" style="width:${m !== null ? (m/SMAX*100) : 0}%;background:${color}"></div></div>
-          <div class="scoreTag">${m !== null ? scoreLabel(m) + "｜肯定率 " + Math.round(s.positive*100) + "%" : "有効回答なし"}</div>
-        </div>`;
-      }).join("")}
-    </div>
+    <div class="stat"><div class="statValue">${rate !== null ? rate + "%" : "—"}</div><div class="statLabel">回答率${target ? `（対象${target}名）` : ""}</div></div>
+    <div class="stat"><div class="statValue" style="color:${ov.mean !== null ? scoreColor(ov.mean) : "#94a3b8"}">${ov.mean !== null ? ov.mean.toFixed(2) : "—"}</div><div class="statLabel">全体平均 / 5${ov.mean !== null ? "（" + scoreLabel(ov.mean) + "）" : ""}</div></div>
+    <div class="stat"><div class="statValue">${ov.positive !== null ? Math.round(ov.positive*100) + "%" : "—"}</div><div class="statLabel">肯定率（4・5の割合）</div></div>
+    <div class="stat"><div class="statValue">${uk !== null ? Math.round(uk*100) + "%" : "—"}</div><div class="statLabel">わからない率</div></div>
   </div>`;
 
   const distColors = ["#dc2626","#f97316","#cbd5e1","#5eead4","#00B388"];
-  const qRows = QUESTIONS.filter(q => q.type === "scale").map(q => {
+  const qRows = QUESTIONS.filter(q => q.type === "scale").map((q, i) => {
     const s = questionStats(recs, q);
     const total = s.dist.reduce((a,b)=>a+b,0);
     const bar = total
-      ? s.dist.map((c,i) => c ? `<div style="width:${c/total*100}%;background:${distColors[i]}" title="${i+1}: ${c}人"></div>` : "").join("")
+      ? s.dist.map((c,j) => c ? `<div style="width:${c/total*100}%;background:${distColors[j]}" title="${j+1}: ${c}人"></div>` : "").join("")
       : "";
     return `<tr>
-      <td class="left">${q.id}${q.reverse ? `<span class="revTag">逆転</span>` : ""}</td>
+      <td class="left">${i+1}${q.reverse ? `<span class="revTag">逆転</span>` : ""}</td>
       <td class="qtext">${escapeHtml(q.text)}</td>
       <td><div class="distBar">${bar}</div></td>
       <td>${s.meanPlain !== null ? s.meanPlain.toFixed(2) : "—"}</td>
       <td>${s.meanAdj !== null ? s.meanAdj.toFixed(2) : "—"}</td>
       <td>${s.positive !== null ? Math.round(s.positive*100) + "%" : "—"}</td>
-      <td>${s.unknown}${s.unknownRate ? `（${Math.round(s.unknownRate*100)}%）` : ""}</td>
+      <td>${q.unknown ? s.unknown + (s.unknownRate ? `（${Math.round(s.unknownRate*100)}%）` : "") : "—"}</td>
     </tr>`;
   }).join("");
 
@@ -576,7 +621,7 @@ function dashboardHtml(){
       <tbody>${qRows}</tbody>
     </table></div>
     <div class="note" style="margin-top:16px;border:none;padding:0">
-      「わからない」は平均から除外しています。この値が高い設問は評価が低いのではなく、内部委託に関わっていない人が多いと読みます。
+      設問5・6は「そう思う」ほど評価が悪いため、評価方向の平均では反転しています。「わからない」は平均から除外しており、この値が高い設問は評価が低いのではなく、内部委託に関わっていない人が多いと読みます。
     </div>
   </div>`;
 
@@ -586,7 +631,7 @@ function dashboardHtml(){
     recs.forEach(r => {
       const v = String((r.answers||{})[q.id] || "").trim();
       if(v){
-        const label = dashStore === ALL ? `${escapeHtml(r.store || "")}｜${q.id}` : q.id;
+        const label = dashStore === ALL && r.store ? `${escapeHtml(r.store)}` : "自由記述";
         voices += `<div class="voice"><div class="voiceMeta">${label}｜${escapeHtml(q.text)}</div>${escapeHtml(v)}</div>`;
       }
     });
@@ -598,66 +643,112 @@ function dashboardHtml(){
 
   const reading = `<div class="note">
     <strong>読み方</strong>
-    <p>1店舗あたりの回答が10件未満の場合、1人の回答で平均が0.2前後動きます。平均の小さな差ではなく、回答の分布（1〜2を選んだ人が何人いるか）と自由記述を根拠に判断してください。</p>
+    <p>1店舗あたりの回答が10件未満だと、1人の回答で平均が0.2前後動きます。平均の小さな差ではなく、回答の分布（1〜2を選んだ人が何人いるか）と自由記述を根拠に判断してください。</p>
   </div>`;
 
-  return head + stats + blockCards + qTable + storeTableHtml(periodRecs, storesInData) + voicePanel + trendHtml(periods) + reading;
+  return head + stats + qTable + storeSummaryHtml(periodRecs, storesInData)
+       + storeMatrixHtml(periodRecs, storesInData) + voicePanel + trendHtml(periods) + reading;
 }
 
-function storeTableHtml(periodRecs, storesInData){
-  if(storesInData.length < 2) return "";
-  const blocks = BLOCKS.filter(b => QUESTIONS.some(q => q.block===b.key && q.type==="scale"));
+// 店舗別サマリ
+function storeSummaryHtml(periodRecs, storesInData){
+  if(!storesInData.length) return "";
   const rows = storesInData.map(s => {
     const recs = periodRecs.filter(r => r.store === s);
     const target = TARGETS[s] || null;
-    const cells = blocks.map(b => {
-      if(recs.length < minN) return `<td>—</td>`;
-      const m = blockStats(recs, b.key).mean;
-      return `<td>${m !== null ? m.toFixed(2) : "—"}</td>`;
-    }).join("");
+    if(recs.length < minN){
+      return `<tr><td class="storeName">${escapeHtml(s)}</td><td>${recs.length}${target ? ` / ${target}` : ""}</td><td colspan="3" style="color:#94a3b8">表示下限（${minN}人）未満</td></tr>`;
+    }
+    const ov = overallStats(recs);
+    const uk = unknownRateOf(recs);
     return `<tr>
-      <td class="left">${escapeHtml(s)}</td>
+      <td class="storeName">${escapeHtml(s)}</td>
       <td>${recs.length}${target ? ` / ${target}` : ""}</td>
-      ${cells}
+      <td style="background:${cellColor(ov.mean)}">${ov.mean !== null ? ov.mean.toFixed(2) : "—"}</td>
+      <td>${ov.positive !== null ? Math.round(ov.positive*100) + "%" : "—"}</td>
+      <td>${uk !== null ? Math.round(uk*100) + "%" : "—"}</td>
     </tr>`;
   }).join("");
+
+  const all = overallStats(periodRecs);
+  const allUk = unknownRateOf(periodRecs);
+  const totalRow = storesInData.length > 1 ? `<tr class="totalRow">
+      <td class="storeName">全店舗</td>
+      <td>${periodRecs.length}</td>
+      <td>${all.mean !== null ? all.mean.toFixed(2) : "—"}</td>
+      <td>${all.positive !== null ? Math.round(all.positive*100) + "%" : "—"}</td>
+      <td>${allUk !== null ? Math.round(allUk*100) + "%" : "—"}</td>
+    </tr>` : "";
+
   return `<div class="panel">
-    <div class="panelHead"><h3 style="margin:0">店舗別</h3><span class="scoreTag">表示下限（${minN}人）未満の店舗は非表示</span></div>
+    <div class="panelHead"><h3 style="margin:0">店舗別サマリ</h3><span class="scoreTag">この月の全店舗が対象（上の店舗フィルタの影響を受けません）</span></div>
     <div class="tableWrap"><table>
-      <thead><tr><th class="left">店舗</th><th>回答数</th>${blocks.map(b=>`<th>${escapeHtml(b.name)}</th>`).join("")}</tr></thead>
+      <thead><tr><th class="left">店舗</th><th>回答数</th><th>全体平均</th><th>肯定率</th><th>わからない率</th></tr></thead>
+      <tbody>${rows}${totalRow}</tbody>
+    </table></div>
+  </div>`;
+}
+
+// 店舗 × 設問のマトリクス（評価方向に揃えた平均）
+function storeMatrixHtml(periodRecs, storesInData){
+  if(storesInData.length < 2) return "";
+  const qs = QUESTIONS.filter(q => q.type === "scale");
+  const rows = storesInData.map(s => {
+    const recs = periodRecs.filter(r => r.store === s);
+    if(recs.length < minN){
+      return `<tr><td class="storeName">${escapeHtml(s)}</td><td>${recs.length}</td><td colspan="${qs.length}" style="color:#94a3b8">表示下限（${minN}人）未満</td></tr>`;
+    }
+    const cells = qs.map(q => {
+      const m = questionStats(recs, q).meanAdj;
+      return `<td style="background:${cellColor(m)}">${m !== null ? m.toFixed(1) : "—"}</td>`;
+    }).join("");
+    return `<tr><td class="storeName">${escapeHtml(s)}</td><td>${recs.length}</td>${cells}</tr>`;
+  }).join("");
+
+  return `<div class="panel">
+    <div class="panelHead"><h3 style="margin:0">店舗 × 設問</h3><span class="scoreTag">この月の全店舗が対象。数字は評価方向に揃えた平均（設問5・6は反転済み）</span></div>
+    <div class="tableWrap"><table>
+      <thead><tr><th class="left">店舗</th><th>n</th>${qs.map((q,i)=>`<th title="${escapeHtml(q.text)}">${i+1}</th>`).join("")}</tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
+    <div class="legend"><span>低い</span><span class="legendBar"></span><span>高い</span><span style="margin-left:10px">列番号は設問番号（見出しにカーソルを当てると設問文が出ます）</span></div>
   </div>`;
 }
 
 function trendHtml(periods){
   const asc = [...periods].sort();
   if(asc.length < 2) return "";
-  const blocks = BLOCKS.filter(b => QUESTIONS.some(q => q.block===b.key && q.type==="scale"));
   const scopeName = dashStore === ALL ? "全店舗" : dashStore;
   const rows = asc.map(p => {
     const recs = responses.filter(r => r.period === p && (dashStore === ALL || r.store === dashStore));
-    const cells = blocks.map(b => {
-      if(recs.length < minN) return `<td>—</td>`;
-      const m = blockStats(recs, b.key).mean;
-      return `<td>${m !== null ? m.toFixed(2) : "—"}</td>`;
-    }).join("");
-    return `<tr><td class="left">${formatPeriod(p)}</td><td>${recs.length}</td>${cells}</tr>`;
+    if(!recs.length){
+      return `<tr><td class="left">${formatPeriod(p)}</td><td>0</td><td colspan="2" style="color:#94a3b8">回答なし</td></tr>`;
+    }
+    if(recs.length < minN){
+      return `<tr><td class="left">${formatPeriod(p)}</td><td>${recs.length}</td><td colspan="2" style="color:#94a3b8">表示下限（${minN}人）未満</td></tr>`;
+    }
+    const ov = overallStats(recs);
+    return `<tr>
+      <td class="left">${formatPeriod(p)}</td>
+      <td>${recs.length}</td>
+      <td style="background:${cellColor(ov.mean)}">${ov.mean !== null ? ov.mean.toFixed(2) : "—"}</td>
+      <td>${ov.positive !== null ? Math.round(ov.positive*100) + "%" : "—"}</td>
+    </tr>`;
   }).join("");
   return `<div class="panel">
-    <div class="panelHead"><h3 style="margin:0">実施回ごとの推移</h3><span class="scoreTag">対象：${escapeHtml(scopeName)}</span></div>
+    <div class="panelHead"><h3 style="margin:0">実施月ごとの推移</h3><span class="scoreTag">対象：${escapeHtml(scopeName)}</span></div>
     <div class="tableWrap"><table>
-      <thead><tr><th class="left">実施回</th><th>回答数</th>${blocks.map(b=>`<th>${escapeHtml(b.name)}</th>`).join("")}</tr></thead>
+      <thead><tr><th class="left">実施月</th><th>回答数</th><th>全体平均</th><th>肯定率</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
   </div>`;
 }
 
 function exportCsv(){
-  const cols = ["実施回","店舗","送信日時"].concat(QUESTIONS.map(q => q.id));
+  const cols = ["実施月","店舗","送信日時"].concat(QUESTIONS.map((q,i) => "設問" + (i+1) + "(" + q.id + ")"));
   const lines = [cols.join(",")];
   responses.slice().sort((a,b)=>(a.ts||0)-(b.ts||0)).forEach(r => {
-    const row = [r.period, r.store || "", r.ts ? new Date(r.ts).toLocaleString("ja-JP") : ""]
+    const row = [r.period || "", r.store || "", r.ts ? new Date(r.ts).toLocaleString("ja-JP") : ""]
       .concat(QUESTIONS.map(q => (r.answers||{})[q.id] === undefined ? "" : String((r.answers||{})[q.id])));
     lines.push(row.map(v => `"${String(v).replace(/"/g,'""')}"`).join(","));
   });
